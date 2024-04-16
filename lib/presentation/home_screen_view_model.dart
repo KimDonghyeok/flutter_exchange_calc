@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_exchange_calc/data/model/exchange.dart';
 import 'package:flutter_exchange_calc/data/repository/exchange_data_repository.dart';
 
+import '../data/model/currency.dart';
+
+
 class HomeScreenViewModel with ChangeNotifier {
   final ExchangeRepository _repository;
 
@@ -12,6 +15,10 @@ class HomeScreenViewModel with ChangeNotifier {
 
   double _fromValue = 0;
   double _toValue = 0;
+
+  Currency _fromCurrency = Currency.KRW;
+  Currency _toCurrency = Currency.USD;
+
   Exchange? _exchangeRateData;
 
   get fromValue => _fromValue;
@@ -22,5 +29,11 @@ class HomeScreenViewModel with ChangeNotifier {
 
   Future<void> getExchangeRateData(String currency) async {
     _exchangeRateData = await _repository.getExchangeRateData(currency);
+  }
+
+  void changeFrom(String value) {
+    _fromValue = double.parse(value);
+
+
   }
 }
