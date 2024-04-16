@@ -22,10 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void updateUI() {
     if (mounted) {
       setState(() {
-        _fromController.text =
-            (viewModel.fromValue).toString();
-        _toController.text =
-            (viewModel.toValue).toString();
       });
     }
   }
@@ -43,9 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Currency? selectedFrom;
-  Currency? selectedTo;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,43 +48,39 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '김동혁',
-              style: TextStyle(fontSize: 40),
+            Text('환율 정보 기준 시간 : ${viewModel.updateDate}'),
+            SizedBox(
+              height: 8,
             ),
-            Text(
-              '전종현',
-              style: TextStyle(fontSize: 40),
-            ),
-            Text(viewModel.updateDate),
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _fromController,
-                    keyboardType: TextInputType.number,
-
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: '값을 입력',
-                    ),
-                    onChanged: (value) {
-                      viewModel.changeFromValue(value);
+                  child: ListenableBuilder(
+                    listenable: viewModel.fromValue,
+                    builder: (context, child) {
+                      _fromController.text = viewModel.fromValue.value;
+                      return TextField(
+                      controller: _fromController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: '값을 입력',
+                      ),
+                      onChanged: (value) {
+                        viewModel.changeFromValue(value);
+                      },
+                    );
                     },
-
-
-
                   ),
                 ),
                 DropdownMenu<Currency>(
                   initialSelection: viewModel.fromCurrency,
-                  requestFocusOnTap: true,
                   onSelected: (Currency? value) {
                     if (value != null) {
-                      viewModel.changeFromCurrency(value);
+                      viewModel.changeFromCurrency(value, _fromController.text, _toController.text);
                     }
                   },
                   dropdownMenuEntries: Currency.values.map((e) {
@@ -106,24 +95,27 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _toController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: '값을 입력',
-                    ),
-                    onChanged: (value) {
-                      viewModel.changeToValue(value);
-                    },
-                  ),
-                ),
+                    child: ListenableBuilder(
+                        listenable: viewModel.toValue,
+                        builder: (context, child) {
+                          _toController.text = viewModel.toValue.value;
+                          return TextField(
+                              controller: _toController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: '값을 입력',
+                              ),
+                              onChanged: (value) {
+                                viewModel.changeToValue(value);
+                              },
+                            );
+                        })),
                 DropdownMenu<Currency>(
                   initialSelection: viewModel.toCurrency,
-                  requestFocusOnTap: true,
                   onSelected: (Currency? value) {
                     if (value != null) {
-                      viewModel.changeToCurrency(value);
+                      viewModel.changeToCurrency(value, _fromController.text, _toController.text);
                     }
                   },
                   dropdownMenuEntries: Currency.values.map((e) {
