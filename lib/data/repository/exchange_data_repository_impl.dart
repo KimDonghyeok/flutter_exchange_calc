@@ -1,4 +1,4 @@
-import 'package:flutter_exchange_calc/data/dto/exchange_dto_mapper.dart';
+import 'package:flutter_exchange_calc/data/mapper/exchange_dto_mapper.dart';
 import 'package:flutter_exchange_calc/data/model/exchange.dart';
 
 import '../data_source/exchange_data_source.dart';
