@@ -12,8 +12,9 @@ _$ExchangeImpl _$$ExchangeImplFromJson(Map<String, dynamic> json) =>
       timeLastUpdateUtc: json['timeLastUpdateUtc'] as String?,
       timeNextUpdateUnix: json['timeNextUpdateUnix'] as num?,
       timeNextUpdateUtc: json['timeNextUpdateUtc'] as String?,
-      conversionRate: ConversionRate.fromJson(
-          json['conversionRate'] as Map<String, dynamic>),
+      conversionRate: (json['conversionRate'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$$ExchangeImplToJson(_$ExchangeImpl instance) =>

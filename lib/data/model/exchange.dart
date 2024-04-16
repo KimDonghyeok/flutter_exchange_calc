@@ -1,4 +1,3 @@
-import 'package:flutter_exchange_calc/data/model/conversion_rate.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'exchange.freezed.dart';
@@ -11,7 +10,7 @@ class Exchange with _$Exchange {
     required String? timeLastUpdateUtc,
     required num? timeNextUpdateUnix,
     required String? timeNextUpdateUtc,
-    required ConversionRate conversionRate,
+    required Map<String, double> conversionRate,
   }) = _Exchange;
 
   factory Exchange.fromJson(Map<String, Object?> json) =>

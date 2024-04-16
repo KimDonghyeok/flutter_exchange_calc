@@ -20,8 +20,21 @@ class _HomeScreenState extends State<HomeScreen> {
   final _toController = TextEditingController();
 
   void updateUI() {
-    setState(() {});
+    if (mounted) {
+      setState(() {
+        _fromController.text = viewModel.fromValue.toString();
+        _toController.text = viewModel.toValue.toString();
+      });
+    }
   }
+
+  //
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _fromController.text = viewModel.fromValue.toString();
+  //   _toController.text = viewModel.toValue.toString();
+  // }
 
   @override
   void initState() {
@@ -59,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               '전종현',
               style: TextStyle(fontSize: 40),
             ),
-            Text('update date'),
+            Text(viewModel.updateDate),
             Row(
               children: [
                 Expanded(
@@ -67,23 +80,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller: _fromController,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly],
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: '값을 입력',
                     ),
                     onChanged: (value) {
+                      viewModel.changeFromValue(value);
                     },
                   ),
                 ),
-                DropdownMenu(
-                  initialSelection: Currency.KRW,
+                DropdownMenu<Currency>(
+                  initialSelection: viewModel.fromCurrency,
                   requestFocusOnTap: true,
-                  label: const Text('From'),
+                  // label: const Text('From'),
                   onSelected: (Currency? value) {
-                    setState(() {
-                      selectedFrom = value;
-                    });
+                    if (value != null) {
+                      viewModel.changeFromCurrency(value);
+                      viewModel.changeFromValue(_fromController.text);
+                    }
                   },
                   dropdownMenuEntries: Currency.values.map((e) {
                     return DropdownMenuEntry(value: e, label: e.label);
@@ -99,20 +115,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: TextField(
                     controller: _toController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: '값을 입력',
                     ),
+                    onChanged: (value) {
+                      viewModel.changeToValue(value);
+                    },
                   ),
                 ),
-                DropdownMenu(
-                  initialSelection: Currency.USD,
+                DropdownMenu<Currency>(
+                  initialSelection: viewModel.toCurrency,
                   requestFocusOnTap: true,
-                  label: const Text('To'),
+                  // label: const Text('To'),
                   onSelected: (Currency? value) {
-                    setState(() {
-                      selectedFrom = value;
-                    });
+                    if (value != null) {
+                      viewModel.changeToCurrency(value);
+                      viewModel.changeToValue(_toController.text);
+                    }
                   },
                   dropdownMenuEntries: Currency.values.map((e) {
                     return DropdownMenuEntry(value: e, label: e.label);
@@ -126,4 +150,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
