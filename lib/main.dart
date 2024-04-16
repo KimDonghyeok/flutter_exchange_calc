@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_exchange_calc/data/data_source/exchange_data_source_impl.dart';
+import 'package:flutter_exchange_calc/data/repository/exchange_data_repository_impl.dart';
 import 'package:flutter_exchange_calc/presentation/home_screen.dart';
+import 'package:flutter_exchange_calc/presentation/home_screen_view_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +20,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      home: HomeScreen(
+        viewModel: HomeScreenViewModel(
+          repository: ExchangeRepositoryImpl(
+            dataSource: ExchangeDataSourceImpl(),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_exchange_calc/presentation/home_screen_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final HomeScreenViewModel _viewModel;
+
+  const HomeScreen({super.key, required HomeScreenViewModel viewModel})
+      : _viewModel = viewModel;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late HomeScreenViewModel viewModel;
   final _fromController = TextEditingController();
   final _toController = TextEditingController();
+
+  void updateUI() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = widget._viewModel;
+    viewModel.addListener(updateUI);
+  }
+
+  @override
+  void dispose() {
+    viewModel.removeListener(updateUI);
+    super.dispose();
+  }
 
   Currency? selectedFrom;
   Currency? selectedTo;
@@ -27,24 +49,25 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'source',
+              '김동혁',
               style: TextStyle(fontSize: 40),
             ),
             Text(
-              'source',
+              '전종현',
               style: TextStyle(fontSize: 40),
             ),
             Text('update date'),
             Row(
               children: [
                 Expanded(
-                    child: TextField(
-                  controller: _fromController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '1',
+                  child: TextField(
+                    controller: _fromController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '값을 입력',
+                    ),
                   ),
-                )),
+                ),
                 DropdownMenu(
                   initialSelection: Currency.KRW,
                   requestFocusOnTap: true,
@@ -66,13 +89,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 Expanded(
-                    child: TextField(
-                  controller: _toController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '1',
+                  child: TextField(
+                    controller: _toController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '값을 입력',
+                    ),
                   ),
-                )),
+                ),
                 DropdownMenu(
                   initialSelection: Currency.USD,
                   requestFocusOnTap: true,

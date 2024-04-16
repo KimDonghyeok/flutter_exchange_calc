@@ -7,7 +7,7 @@ import 'exchange_data_repository.dart';
 class ExchangeRepositoryImpl implements ExchangeRepository {
   final ExchangeDataSource _dataSource;
 
-  ExchangeRepositoryImpl(ExchangeDataSource dataSource)
+  ExchangeRepositoryImpl({required ExchangeDataSource dataSource})
       : _dataSource = dataSource;
 
   @override
