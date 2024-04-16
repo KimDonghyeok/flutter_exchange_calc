@@ -22,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void updateUI() {
     if (mounted) {
       setState(() {
-        _fromController.text = viewModel.fromValue.toString();
-        _toController.text = viewModel.toValue.toString();
+        _fromController.text = (viewModel.fromValue).toStringAsFixed(2);
+        _toController.text = (viewModel.toValue).toStringAsFixed(2);
       });
     }
   }
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -98,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   onSelected: (Currency? value) {
                     if (value != null) {
                       viewModel.changeFromCurrency(value);
-                      viewModel.changeFromValue(_fromController.text);
                     }
                   },
                   dropdownMenuEntries: Currency.values.map((e) {
@@ -135,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   onSelected: (Currency? value) {
                     if (value != null) {
                       viewModel.changeToCurrency(value);
-                      viewModel.changeToValue(_toController.text);
                     }
                   },
                   dropdownMenuEntries: Currency.values.map((e) {
