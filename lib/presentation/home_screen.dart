@@ -22,19 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void updateUI() {
     if (mounted) {
       setState(() {
-        _fromController.text = (viewModel.fromValue).toStringAsFixed(2);
-        _toController.text = (viewModel.toValue).toStringAsFixed(2);
+        _fromController.text =
+            (viewModel.fromValue).toString();
+        _toController.text =
+            (viewModel.toValue).toString();
       });
     }
   }
-
-  //
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   _fromController.text = viewModel.fromValue.toString();
-  //   _toController.text = viewModel.toValue.toString();
-  // }
 
   @override
   void initState() {
@@ -79,9 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextField(
                     controller: _fromController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: '값을 입력',
@@ -89,12 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     onChanged: (value) {
                       viewModel.changeFromValue(value);
                     },
+
+
+
                   ),
                 ),
                 DropdownMenu<Currency>(
                   initialSelection: viewModel.fromCurrency,
                   requestFocusOnTap: true,
-                  // label: const Text('From'),
                   onSelected: (Currency? value) {
                     if (value != null) {
                       viewModel.changeFromCurrency(value);
@@ -115,9 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextField(
                     controller: _toController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: '값을 입력',
@@ -130,7 +121,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 DropdownMenu<Currency>(
                   initialSelection: viewModel.toCurrency,
                   requestFocusOnTap: true,
-                  // label: const Text('To'),
                   onSelected: (Currency? value) {
                     if (value != null) {
                       viewModel.changeToCurrency(value);

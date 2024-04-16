@@ -8,8 +8,8 @@ class HomeScreenViewModel with ChangeNotifier {
   final ExchangeRepository _repository;
   Exchange? _exchangeRateData;
 
-  num _fromValue = 0;
-  num _toValue = 0;
+  double _fromValue = 0;
+  double _toValue = 0;
 
   Currency _fromCurrency = Currency.KRW;
   Currency _toCurrency = Currency.USD;
@@ -19,24 +19,25 @@ class HomeScreenViewModel with ChangeNotifier {
     getExchangeRateData('USD');
   }
 
-  get fromValue => _fromValue;
+  double get fromValue => _fromValue;
 
-  get toValue => _toValue;
+  double get toValue => _toValue;
 
-  get fromCurrency => _fromCurrency;
+  Currency get fromCurrency => _fromCurrency;
 
-  get toCurrency => _toCurrency;
+  Currency get toCurrency => _toCurrency;
 
-  get updateDate =>
+  String get updateDate =>
       _exchangeRateData?.timeLastUpdateUtc ?? '서버에서 환율 데이터를 받아올 수 없습니다.';
 
   Future<void> getExchangeRateData(String currency) async {
     _exchangeRateData = await _repository.getExchangeRateData(currency);
+    notifyListeners();
   }
 
   void changeFromValue(String value) {
     if (_exchangeRateData == null) return;
-    _fromValue = int.tryParse(value) ?? 0;
+    _fromValue = double.tryParse(value) ?? 0;
     _toValue = (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
         _fromValue /
         (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1);
@@ -45,7 +46,7 @@ class HomeScreenViewModel with ChangeNotifier {
 
   void changeToValue(String value) {
     if (_exchangeRateData == null) return;
-    _toValue = int.tryParse(value) ?? 0;
+    _toValue = double.tryParse(value) ?? 0;
     _fromValue = (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1) *
         _toValue /
         (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1);
@@ -62,9 +63,9 @@ class HomeScreenViewModel with ChangeNotifier {
 
   void changeToCurrency(Currency value) {
     _toCurrency = value;
-    _fromValue = (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1) *
-        _toValue /
-        (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1);
+    _toValue = (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
+        _fromValue /
+        (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1);
     notifyListeners();
   }
 }
