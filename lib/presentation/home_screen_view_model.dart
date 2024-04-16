@@ -6,22 +6,23 @@ import '../data/model/currency.dart';
 
 class HomeScreenViewModel with ChangeNotifier {
   final ExchangeRepository _repository;
-  Exchange? _exchangeRateData;
-
-  double _fromValue = 0;
-  double _toValue = 0;
-
-  Currency _fromCurrency = Currency.KRW;
-  Currency _toCurrency = Currency.USD;
 
   HomeScreenViewModel({required ExchangeRepository repository})
       : _repository = repository {
     getExchangeRateData('USD');
   }
 
-  double get fromValue => _fromValue;
+  Exchange? _exchangeRateData;
 
-  double get toValue => _toValue;
+  String _fromValue = '';
+  String _toValue = '';
+
+  Currency _fromCurrency = Currency.USD;
+  Currency _toCurrency = Currency.KRW;
+
+  String get fromValue => _fromValue;
+
+  String get toValue => _toValue;
 
   Currency get fromCurrency => _fromCurrency;
 
@@ -37,35 +38,61 @@ class HomeScreenViewModel with ChangeNotifier {
 
   void changeFromValue(String value) {
     if (_exchangeRateData == null) return;
-    _fromValue = double.tryParse(value) ?? 0;
-    _toValue = (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
-        _fromValue /
-        (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1);
+    if (value == '') {
+      _toValue = '';
+      notifyListeners();
+      return;
+    }
+
+    _fromValue = value;
+    final numFromValue = double.parse(value);
+    _toValue = ((_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
+            numFromValue /
+            (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1))
+        .toStringAsFixed(2)
+        .replaceAll('.00', '');
+
     notifyListeners();
   }
 
   void changeToValue(String value) {
     if (_exchangeRateData == null) return;
-    _toValue = double.tryParse(value) ?? 0;
-    _fromValue = (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1) *
-        _toValue /
-        (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1);
+    if (value == '') {
+      _fromValue = '';
+      notifyListeners();
+      return;
+    }
+
+    _toValue = value;
+    final numToValue = double.parse(value);
+    _fromValue =
+        ((_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1) *
+                numToValue /
+                (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1))
+            .toStringAsFixed(2)
+            .replaceAll('.00', '');
     notifyListeners();
   }
 
   void changeFromCurrency(Currency value) {
     _fromCurrency = value;
-    _toValue = (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
-        _fromValue /
-        (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1);
+    final numFromValue = num.parse(_fromValue);
+    _toValue = ((_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
+            numFromValue /
+            (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1))
+        .toStringAsFixed(2)
+        .replaceAll('.00', '');
     notifyListeners();
   }
 
   void changeToCurrency(Currency value) {
     _toCurrency = value;
-    _toValue = (_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
-        _fromValue /
-        (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1);
+    final numFromValue = num.parse(_fromValue);
+    _toValue = ((_exchangeRateData!.conversionRate[_toCurrency.label] ?? 1) *
+            numFromValue /
+            (_exchangeRateData!.conversionRate[_fromCurrency.label] ?? 1))
+        .toStringAsFixed(2)
+        .replaceAll('.00', '');
     notifyListeners();
   }
 }

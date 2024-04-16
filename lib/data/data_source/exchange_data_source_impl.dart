@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter_exchange_calc/data/dto/exchange_dto.dart';
 import 'package:http/http.dart' as http;
+
 import 'exchange_data_source.dart';
 
-const String _key = '4b3a3dbbbbd439a2527e41fa';
+const String _key = 'a7b618045f0a0d468ec0b8db';
 
 class ExchangeDataSourceImpl implements ExchangeDataSource {
   String _baseUri(String key) =>
